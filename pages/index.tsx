@@ -7,12 +7,13 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>teste de chat do duduzinho eeee</title>
+        <title>chill chat</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main>
-        <h1>edu's advanced chat :D</h1>
+        <h1>Edu's chat :D</h1>
+        <h2>Still proof of concept, adding layout to this soon</h2>
         <AblyChatComponent />
       </main>
     </div>

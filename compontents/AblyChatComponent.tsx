@@ -12,8 +12,8 @@ export default function AblyChatComponent() {
   const [username, setUsername] = useState('');
   const messageTextIsEmpty = messageText.trim().length === 0;
 
-  [channel, ably] = useChannel('chat-test', (message: string) => {
-    const history = receivedMessages.slice(-199);
+  [channel, ably] = useChannel(process.env.NODE_ENV == 'development' ? 'chat-dev' : 'chat-test', (message: string) => {
+    const history = receivedMessages.slice(-49);
     setMessages([...history, message]);
   });
 
@@ -29,7 +29,9 @@ export default function AblyChatComponent() {
   }
 
   useEffect(() => {
-    setUsername(prompt('Qual seu nome?'));
+    const name = prompt('Qual seu nome?');
+    setUsername(name);
+    channel.publish({ name: 'chat-message', data: `${name} entered the chat.` });
   }, []);
 
   return (
