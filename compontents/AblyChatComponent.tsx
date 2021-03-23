@@ -29,7 +29,10 @@ export default function AblyChatComponent() {
   }
 
   useEffect(() => {
-    const name = prompt('Qual seu nome?');
+    let name: string;
+    while (name === null || name === undefined || name.trim().length === 0) {
+      name = prompt('What is your name? (required)');
+    }
     setUsername(name);
     channel.publish({ name: 'chat-message', data: `${name} entered the chat.` });
   }, []);
