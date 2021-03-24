@@ -7,9 +7,11 @@ export function useChannel(channelName: string, callbackOnMessage: any) {
   const channel = ably.channels.get(channelName);
 
   const onMount = () => {
+    channel.presence.subscribe(member => {});
     channel.subscribe(msg => {
       callbackOnMessage(msg);
     });
+    channel.presence.enter(null);
   }
 
   const onUnmount = () => {

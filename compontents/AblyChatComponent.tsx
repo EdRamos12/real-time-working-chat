@@ -12,15 +12,21 @@ export default function AblyChatComponent() {
   const [username, setUsername] = useState('');
   const messageTextIsEmpty = messageText.trim().length === 0;
 
-  [channel, ably] = useChannel(process.env.NODE_ENV == 'development' ? 'chat-dev' : 'chat-test', (message: string) => {
+  [channel, ably] = useChannel(process.env.NODE_ENV == 'development' ? 'chat-dev' : 'chat-main', (message: string) => {
     const history = receivedMessages.slice(-49);
     setMessages([...history, message]);
   });
+
+  window['customChannel'] = channel;
 
   const sendChatMessage = (messageText: string) => {
     channel.publish({ name: 'chat-message', data: `${username}: ${messageText}` });
     setMessageText('');
     inputBox.focus();
+    const presence = channel.presence.get().then(data => {
+      console.log(data);
+    });
+    console.log(presence);
   }
 
   const handleFormSubmission = (event: FormEvent) => {
@@ -33,9 +39,11 @@ export default function AblyChatComponent() {
     while (name === null || name === undefined || name.trim().length === 0) {
       name = prompt('What is your name? (required)');
     }
+    // console.log(ably.connection.id);
+    // const name = ably.connection.id;
     setUsername(name);
     channel.publish({ name: 'chat-message', data: `${name} entered the chat.` });
-  }, []);
+  }, [ably]);
 
   return (
     <div className="chatHolder">
