@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useState, useEffect, FormEvent } from 'react';
-import { useChannel } from '../compontents/AblyReactEffect';
+import { useChannel } from './AblyReactEffect';
 
 export default function AblyChatComponent() {
   let inputBox = null;

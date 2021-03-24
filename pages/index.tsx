@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 
-const AblyChatComponent = dynamic(() => import('../compontents/AblyChatComponent'), { ssr: false });
+const AblyChatComponent = dynamic(() => import('../components/AblyChatComponent'), { ssr: false });
 
 export default function Home() {
   return (
