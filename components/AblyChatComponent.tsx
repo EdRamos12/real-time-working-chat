@@ -45,9 +45,6 @@ export default function AblyChatComponent() {
       setUserList(previous => [...previous, formatToUsernameOnly]);
     });
     channel.presence.enter({ username: name });
-  }, []);
-
-  useEffect(() => {
     channel.presence.subscribe(data => {
       if (data.action == 'enter') {
         setUserList(previous => {
@@ -57,7 +54,8 @@ export default function AblyChatComponent() {
       }
       if (data.action == 'leave') {
         setUserList(previous => {
-          const i = previous.indexOf(data.data.username);
+          console.log(data);
+          const i = previous.indexOf(data.data?.username);
           if (i > -1) {
             return previous.filter(item => item !== data.data.username);
           };
@@ -65,7 +63,7 @@ export default function AblyChatComponent() {
         });
       }
     });
-  }, [userList])
+  }, []);
 
   useEffect(() => {
     channel.publish({ data: { text: `${username} entered the chat.` } });
