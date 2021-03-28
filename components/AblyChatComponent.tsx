@@ -42,7 +42,7 @@ export default function AblyChatComponent() {
     setUsername(name);
     channel.presence.get().then((data: any) => {
       const formatToUsernameOnly = data.map(el => (el.data.username));
-      setUserList(formatToUsernameOnly);
+      setUserList(previous => [...previous, formatToUsernameOnly]);
     });
     channel.presence.enter({ username: name });
   }, []);
