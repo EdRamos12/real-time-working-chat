@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useState, useEffect, FormEvent } from 'react';
 import { useChannel } from './AblyReactEffect';
+import useUnload from './useUnload';
 
 // i can separate where messages will be displayed
 // by using names (or channel by passing on the object) and showing them in their respective names
@@ -22,6 +23,13 @@ export default function AblyChatComponent() {
     const history = receivedMessages.slice(-49);
     setReceivedMessages([...history, message]);
   });
+
+  useUnload(event => {
+    event.preventDefault();
+    // making sure it leaves the presence from chat when quitting
+    channel.presence.leave();
+    //event.returnValue = '';
+  })
 
   const sendChatMessage = (messageText: string) => {
     channel.publish({ data: { text: messageText, username } });
