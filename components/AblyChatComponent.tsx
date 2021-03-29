@@ -28,6 +28,7 @@ export default function AblyChatComponent() {
     event.preventDefault();
     // making sure it leaves the presence from chat when quitting
     channel.presence.leave();
+    channel.publish({ data: { text: `< ${username} leaved the chat.` } });
     //event.returnValue = '';
   })
 
@@ -49,8 +50,12 @@ export default function AblyChatComponent() {
     }
     setUsername(name);
     channel.presence.get().then((data: any) => {
-      const formatToUsernameOnly = data.map(el => (el.data.username));
-      setUserList(previous => [...previous, formatToUsernameOnly]);
+      const formatToUsernameOnly = data.map(el => {return el.data.username});
+      console.log(data, formatToUsernameOnly);
+      setUserList(previous => {
+        const result = formatToUsernameOnly.concat(previous);
+        return result;
+      });
     });
     channel.presence.enter({ username: name });
     channel.presence.subscribe(data => {
@@ -74,7 +79,7 @@ export default function AblyChatComponent() {
   }, []);
 
   useEffect(() => {
-    channel.publish({ data: { text: `${username} entered the chat.` } });
+    channel.publish({ data: { text: `> ${username} entered the chat.` } });
     if (userList.indexOf(username) == -1) {
       setUserList(previous => [...previous, username]);
     }
@@ -98,6 +103,7 @@ export default function AblyChatComponent() {
         />
         <button type="submit" className='button' disabled={messageTextIsEmpty}>Send</button>
       </form>
+      <h3>Online users on chat</h3>
       {userList.map((user, index) => {
         return <p key={index}>{user}</p>
       })}
